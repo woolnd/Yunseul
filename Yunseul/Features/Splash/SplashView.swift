@@ -117,7 +117,7 @@ struct StarParticleView: View {
         GeometryReader { geo in
             ForEach(0..<stars.count, id: \.self) { i in
                 Circle()
-                    .fill(Color("C2D3F5"))
+                    .fill(Color(hex: "C2D3F5"))
                     .frame(width: stars[i].size, height: stars[i].size)
                     .position(
                         x: stars[i].x * geo.size.width,
