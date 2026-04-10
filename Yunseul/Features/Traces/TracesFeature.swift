@@ -13,9 +13,9 @@ struct TracesFeature {
     @ObservableState
     struct State: Equatable {}
     
-    enum Action {}
+    enum Action: Equatable {}
     
-    var body: some ReducerOf<Self> {
-        Reduce{ state, action in .none }
+    var body: some Reducer<State, Action> {
+        EmptyReducer()
     }
 }

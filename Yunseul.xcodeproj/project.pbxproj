@@ -29,6 +29,8 @@
 		6DEBFE482F88B5A400D258B8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DEBFE462F88B5A400D258B8 /* Localizable.strings */; };
 		6DEBFE4B2F88B5AA00D258B8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DEBFE492F88B5AA00D258B8 /* Localizable.strings */; };
 		6DEBFE4E2F88B5AF00D258B8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DEBFE4C2F88B5AF00D258B8 /* Localizable.strings */; };
+		6DEBFE502F88B71200D258B8 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEBFE4F2F88B71200D258B8 /* AppView.swift */; };
+		6DEBFE522F88BA7500D258B8 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEBFE512F88BA7500D258B8 /* MainTabView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,8 @@
 		6DEBFE472F88B5A400D258B8 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = Localizable.strings; sourceTree = "<group>"; };
 		6DEBFE4A2F88B5AA00D258B8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		6DEBFE4D2F88B5AF00D258B8 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = Localizable.strings; sourceTree = "<group>"; };
+		6DEBFE4F2F88B71200D258B8 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		6DEBFE512F88BA7500D258B8 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,8 @@
 			children = (
 				6DEBFE1B2F88AEDC00D258B8 /* YunseulApp.swift */,
 				6DEBFE2F2F88AFE000D258B8 /* AppFeature.swift */,
+				6DEBFE4F2F88B71200D258B8 /* AppView.swift */,
+				6DEBFE512F88BA7500D258B8 /* MainTabView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -320,12 +326,14 @@
 				6DEBFE3A2F88B00A00D258B8 /* TracesFeature.swift in Sources */,
 				6DEBFE362F88AFFD00D258B8 /* HomeFeature.swift in Sources */,
 				6DEBFE342F88AFF600D258B8 /* OnboardingView.swift in Sources */,
+				6DEBFE502F88B71200D258B8 /* AppView.swift in Sources */,
 				6DEBFE3C2F88B01000D258B8 /* TracesView.swift in Sources */,
 				6DEBFE402F88B01C00D258B8 /* SettingsView.swift in Sources */,
 				6DEBFE382F88B00300D258B8 /* HomeView.swift in Sources */,
 				6DEBFE3E2F88B01500D258B8 /* SettingsFeature.swift in Sources */,
 				6DEBFE302F88AFE000D258B8 /* AppFeature.swift in Sources */,
 				6DEBFE1E2F88AEDC00D258B8 /* YunseulApp.swift in Sources */,
+				6DEBFE522F88BA7500D258B8 /* MainTabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
