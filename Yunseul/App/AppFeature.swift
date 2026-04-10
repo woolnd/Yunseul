@@ -14,10 +14,11 @@ struct AppFeature {
     @ObservableState
     struct State: Equatable {
         var isOnboardingCompleted: Bool = false
+        var onboarding = OnboardingFeature.State()
         var home = HomeFeature.State()
         var traces = TracesFeature.State()
         var settings = SettingsFeature.State()
-        var selectedTap: Tab = .home
+        var selectedTab: Tab = .home
         
         enum Tab: Equatable {
             case home
@@ -28,13 +29,14 @@ struct AppFeature {
     
     enum Action {
         case onboardingCompleted
+        case onboarding(OnboardingFeature.Action)
         case home(HomeFeature.Action)
         case traces(TracesFeature.Action)
         case settings(SettingsFeature.Action)
         case tabSelected(State.Tab)
     }
     
-    var body: some ReducerOf<Self> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onboardingCompleted:
@@ -42,12 +44,15 @@ struct AppFeature {
                 return .none
                 
             case .tabSelected(let tab):
-                state.selectedTap = tab
+                state.selectedTab = tab
                 return .none
                 
-            case .home, .traces, .settings:
+            case .onboarding, .home, .traces, .settings:
                 return .none
             }
+        }
+        Scope(state: \.onboarding, action: \.onboarding) {
+            OnboardingFeature()
         }
         Scope(state: \.home, action: \.home) {
             HomeFeature()
