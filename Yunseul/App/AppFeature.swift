@@ -60,12 +60,15 @@ struct AppFeature {
                 state.isSplashFinished = true
                 return .none
                 
-            case .onboardingCompleted:
+            case .onboarding(.onboardingCompleted):
                 state.isOnboardingCompleted = true
-                UserDefaults.standard.set(        
+                UserDefaults.standard.set(
                     true,
                     forKey: UserDefaults.Keys.isOnboardingCompleted
                 )
+                return .none
+                
+            case .onboardingCompleted:
                 return .none
                 
             case .tabSelected(let tab):
