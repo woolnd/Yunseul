@@ -96,6 +96,10 @@ struct HomeView: View {
                 starStorySection(viewStore: viewStore)
                     .padding(.horizontal, 20)
                     .padding(.bottom, 32)
+                
+                StarRelationView(constellation: viewStore.constellation)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 48)
             }
         }
     }

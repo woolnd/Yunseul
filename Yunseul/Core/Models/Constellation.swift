@@ -621,3 +621,94 @@ extension Constellation {
         }
     }
 }
+
+extension Constellation {
+    var relations: [StarRelation] {
+        switch self {
+        case .aries:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "황소자리", description: "바로 옆에서 함께 봄 하늘을 밝혀요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "오리온자리", description: "황금 양털을 찾아 떠난 이아손의 이야기로 연결돼요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "쌍둥이자리", description: "봄 하늘에서 함께 빛나는 별이에요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "천칭자리", description: "하늘 정반대편에서 균형을 이뤄요", icon: "arrow.left.arrow.right")
+            ]
+        case .taurus:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "양자리", description: "봄 하늘에서 나란히 빛나요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "오리온자리", description: "오리온이 플레이아데스를 쫓는 이야기로 연결돼요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "쌍둥이자리", description: "겨울 밤하늘을 함께 수놓아요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "전갈자리", description: "하늘 반대편에서 마주보고 있어요", icon: "arrow.left.arrow.right")
+            ]
+        case .gemini:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "황소자리", description: "겨울 하늘에서 이웃해 있어요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "오리온자리", description: "겨울 하늘의 삼각형을 함께 이뤄요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "게자리", description: "봄 하늘로 이어지는 다리 역할을 해요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "사수자리", description: "하늘 반대편 은하수 중심 근처에 있어요", icon: "arrow.left.arrow.right")
+            ]
+        case .cancer:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "쌍둥이자리", description: "겨울과 봄 사이를 함께 지켜요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "히드라자리", description: "헤라클레스 신화로 연결된 별이에요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "사자자리", description: "봄 하늘의 동반자예요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "염소자리", description: "하늘 반대편에서 서로를 바라봐요", icon: "arrow.left.arrow.right")
+            ]
+        case .leo:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "게자리", description: "봄 하늘에서 이웃해 있어요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "헤라클레스자리", description: "헤라클레스의 첫 번째 과업으로 연결돼요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "처녀자리", description: "봄의 대삼각형을 함께 이뤄요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "물병자리", description: "하늘 반대편에서 균형을 이뤄요", icon: "arrow.left.arrow.right")
+            ]
+        case .virgo:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "사자자리", description: "봄 하늘에서 나란히 빛나요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "천칭자리", description: "아스트라이아의 저울로 연결돼요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "천칭자리", description: "봄에서 여름으로 이어지는 동반자예요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "물고기자리", description: "하늘 반대편에서 마주보고 있어요", icon: "arrow.left.arrow.right")
+            ]
+        case .libra:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "처녀자리", description: "봄과 여름 사이를 함께 지켜요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "처녀자리", description: "아스트라이아 여신의 저울로 연결돼요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "전갈자리", description: "여름 하늘의 동반자예요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "양자리", description: "하늘 반대편에서 균형을 이뤄요", icon: "arrow.left.arrow.right")
+            ]
+        case .scorpio:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "천칭자리", description: "여름 하늘에서 이웃해 있어요", icon: "star.fill"),
+                StarRelation(type: "영원한 적", constellation: "오리온자리", description: "영원히 만나지 못하는 숙명의 별이에요", icon: "bolt.fill"),
+                StarRelation(type: "계절 동반자", constellation: "사수자리", description: "여름 밤하늘 은하수 근처에서 함께 빛나요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "황소자리", description: "하늘 반대편에서 오리온과 함께 있어요", icon: "arrow.left.arrow.right")
+            ]
+        case .sagittarius:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "전갈자리", description: "여름 밤하늘 은하수를 함께 지켜요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "켄타우루스자리", description: "같은 켄타우로스 족으로 연결돼요", icon: "link"),
+                StarRelation(type: "은하수 동반자", constellation: "독수리자리", description: "은하수 위에서 함께 빛나요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "쌍둥이자리", description: "하늘 반대편에서 마주보고 있어요", icon: "arrow.left.arrow.right")
+            ]
+        case .capricorn:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "사수자리", description: "여름과 가을 사이를 함께 지켜요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "물병자리", description: "올림포스 신들의 이야기로 연결돼요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "물병자리", description: "가을 밤하늘의 동반자예요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "게자리", description: "하늘 반대편에서 균형을 이뤄요", icon: "arrow.left.arrow.right")
+            ]
+        case .aquarius:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "염소자리", description: "가을 하늘에서 이웃해 있어요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "독수리자리", description: "가니메데를 데려간 독수리로 연결돼요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "물고기자리", description: "가을 밤하늘을 함께 수놓아요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "사자자리", description: "하늘 반대편에서 마주보고 있어요", icon: "arrow.left.arrow.right")
+            ]
+        case .pisces:
+            return [
+                StarRelation(type: "하늘에서 가장 가까운", constellation: "물병자리", description: "가을 하늘에서 나란히 빛나요", icon: "star.fill"),
+                StarRelation(type: "신화적 연결", constellation: "물병자리", description: "아프로디테와 에로스의 이야기로 연결돼요", icon: "link"),
+                StarRelation(type: "계절 동반자", constellation: "양자리", description: "봄으로 이어지는 겨울 밤하늘의 동반자예요", icon: "moon.stars.fill"),
+                StarRelation(type: "대척점 별자리", constellation: "처녀자리", description: "하늘 반대편에서 균형을 이뤄요", icon: "arrow.left.arrow.right")
+            ]
+        }
+    }
+}
