@@ -113,7 +113,7 @@ struct HomeView: View {
                 .tracking(2)
             
             Text(viewStore.briefingText)
-                .font(.Yunseul.title3)
+                .font(.Yunseul.briefing)
                 .foregroundColor(Color.Yunseul.textPrimary)
                 .lineSpacing(6)
         }
@@ -298,7 +298,7 @@ struct HomeView: View {
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .automatic))
-            .frame(height: 400)
+            .frame(height: 500)
         }
     }
     
@@ -313,20 +313,20 @@ struct HomeView: View {
                     .frame(width: 2, height: 14)
                 
                 Text(page.title)
-                    .font(.custom("Georgia", size: 12))
+                    .font(.Yunseul.storyTitle)
                     .foregroundColor(Color.Yunseul.starBlue)
                     .tracking(2)
                 
                 Spacer()
                 
                 Text("\(index + 1) / \(total)")
-                    .font(.system(size: 10, design: .monospaced))
+                    .font(.Yunseul.captionLight)
                     .foregroundColor(Color.Yunseul.textTertiary)
             }
             
             // 본문
             Text(page.content)
-                .font(.custom("Georgia-Italic", size: 15))
+                .font(.Yunseul.story)
                 .foregroundColor(Color.Yunseul.textPrimary)
                 .lineSpacing(8)
                 .multilineTextAlignment(.leading)
@@ -376,8 +376,7 @@ struct StarMapView: UIViewRepresentable {
     
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
-        mapView.mapType = .mutedStandard
-        mapView.overrideUserInterfaceStyle = .dark
+        mapView.mapType = .standard
         mapView.isScrollEnabled = false
         mapView.isZoomEnabled = false
         mapView.showsUserLocation = true

@@ -152,13 +152,13 @@ struct StarCompassView: View {
 
             VStack(spacing: 6) {
                 Text(viewStore.constellation.rawValue)
-                    .font(.custom("Georgia", size: 30))
+                    .font(.Yunseul.constellationName)
                     .foregroundColor(.white)
                     .tracking(6)
                     .shadow(color: Color.Yunseul.starBlue.opacity(0.6), radius: 8)
                 
                 Text(viewStore.constellation.latinName)
-                    .font(.custom("Georgia-Italic", size: 14))
+                    .font(.Yunseul.constellationSub)
                     .foregroundColor(.white.opacity(0.7))
                     .tracking(4)
             }
@@ -167,7 +167,7 @@ struct StarCompassView: View {
             Spacer().frame(height: 20)
 
             Text(viewStore.briefingText)
-                .font(.custom("Georgia-Italic", size: 16))
+                .font(.Yunseul.briefingSmall)
                 .foregroundColor(.white.opacity(0.85))
                 .multilineTextAlignment(.center)
                 .lineSpacing(6)
@@ -177,7 +177,7 @@ struct StarCompassView: View {
             Spacer().frame(height: 16)
             
             Text(currentDateString)
-                .font(.system(size: 10, design: .monospaced))
+                .font(.Yunseul.captionLight)
                 .foregroundColor(.white.opacity(0.4))
                 .tracking(2)
                 .opacity(textOpacity)
@@ -386,20 +386,20 @@ struct OverlaySnapshotView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 150, height: 120)
-                        .shadow(color: Color(hex: "8AAEFF").opacity(0.9), radius: 24)
+                        .shadow(color: Color.Yunseul.starBlue.opacity(0.9), radius: 24)
                 }
                 
                 Spacer().frame(height: 24)
                 
                 // 별자리 이름
                 Text(constellation.rawValue)
-                    .font(.custom("Georgia", size: 30))
+                    .font(.Yunseul.constellationName)
                     .foregroundColor(.white)
                     .tracking(6)
-                    .shadow(color: Color(hex: "8AAEFF").opacity(0.8), radius: 12)
+                    .shadow(color: Color.Yunseul.starBlue.opacity(0.8), radius: 12)
                 
                 Text(constellation.latinName)
-                    .font(.custom("Georgia-Italic", size: 14))
+                    .font(.Yunseul.constellationSub)
                     .foregroundColor(.white.opacity(0.7))
                     .tracking(4)
                     .padding(.top, 6)
@@ -414,7 +414,7 @@ struct OverlaySnapshotView: View {
                 Spacer().frame(height: 20)
                 
                 Text(briefingText)
-                    .font(.custom("Georgia-Italic", size: 16))
+                    .font(.Yunseul.briefingSmall)
                     .foregroundColor(.white.opacity(0.9))
                     .multilineTextAlignment(.center)
                     .lineSpacing(8)
@@ -424,12 +424,12 @@ struct OverlaySnapshotView: View {
                 
                 VStack(spacing: 6) {
                     Text(dateString)
-                        .font(.system(size: 11, design: .monospaced))
+                        .font(.Yunseul.captionLight)
                         .foregroundColor(.white.opacity(0.5))
                         .tracking(2)
                     
                     Text("✦ YUNSEUL")
-                        .font(.system(size: 10, design: .monospaced))  
+                        .font(.Yunseul.captionLight)
                         .foregroundColor(.white.opacity(0.4))
                         .tracking(4)
                 }
