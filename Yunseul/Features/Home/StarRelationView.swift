@@ -24,12 +24,11 @@ struct StarRelationView: View {
                 Spacer()
                 
                 Text(constellation.latinName)
-                    .font(.custom("Georgia-Italic", size: 11))
+                    .font(.Yunseul.constellationSub)      
                     .foregroundColor(Color.Yunseul.textTertiary)
                     .tracking(1)
             }
             
-            // 관계 카드들
             VStack(spacing: 10) {
                 ForEach(Array(constellation.relations.enumerated()), id: \.offset) { _, relation in
                     relationCard(relation: relation)
@@ -38,10 +37,8 @@ struct StarRelationView: View {
         }
     }
     
-    // MARK: - 관계 카드
     private func relationCard(relation: StarRelation) -> some View {
         HStack(spacing: 14) {
-            // 아이콘
             ZStack {
                 Circle()
                     .fill(Color.Yunseul.elevated)
@@ -52,26 +49,24 @@ struct StarRelationView: View {
                     .foregroundColor(Color.Yunseul.starBlue)
             }
             
-            // 텍스트
             VStack(alignment: .leading, spacing: 3) {
                 Text(relation.type)
-                    .font(.system(size: 10, design: .monospaced))
+                    .font(.Yunseul.captionLight)
                     .foregroundColor(Color.Yunseul.textTertiary)
                     .tracking(0.5)
                 
                 Text(relation.constellation)
-                    .font(.custom("Georgia", size: 15))
+                    .font(.Yunseul.subheadline)
                     .foregroundColor(Color.Yunseul.textPrimary)
                 
                 Text(relation.description)
-                    .font(.custom("Georgia-Italic", size: 12))
+                    .font(.Yunseul.story)
                     .foregroundColor(Color.Yunseul.textSecondary)
                     .lineSpacing(3)
             }
             
             Spacer()
             
-            // 연결선 장식
             VStack(spacing: 3) {
                 ForEach(0..<3) { _ in
                     Circle()
@@ -92,7 +87,7 @@ struct StarRelationView: View {
 
 #Preview {
     ZStack {
-        Color(hex: "04060E").ignoresSafeArea()
+        Color.Yunseul.background.ignoresSafeArea()
         ScrollView {
             StarRelationView(constellation: .aries)
                 .padding(20)
