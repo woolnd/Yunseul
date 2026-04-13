@@ -158,4 +158,21 @@ final class CoreDataService {
         
         try? context.save()
     }
+    
+    func deleteTodayTrailEntry() {
+        let request = NSFetchRequest<StarTrailEntry>(entityName: "StarTrailEntry")
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: Date())
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        request.predicate = NSPredicate(
+            format: "date >= %@ AND date < %@",
+            startOfDay as CVarArg,
+            endOfDay as CVarArg
+        )
+        
+        if let entries = try? context.fetch(request) {
+            entries.forEach { context.delete($0) }
+            try? context.save()
+        }
+    }
 }

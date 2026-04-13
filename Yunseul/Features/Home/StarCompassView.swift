@@ -10,6 +10,8 @@ import AVFoundation
 import Photos
 import Combine
 import ComposableArchitecture
+internal import CoreData
+
 
 // MARK: - 카메라 매니저
 final class CameraManager: NSObject, ObservableObject {
@@ -23,20 +25,16 @@ final class CameraManager: NSObject, ObservableObject {
         setupCamera()
     }
     
-    // CameraManager setupCamera 수정
     private func setupCamera() {
-        // 카메라 권한 확인 후 앨범 권한 순차 요청
         AVCaptureDevice.requestAccess(for: .video) { granted in
             guard granted else { return }
             
-            // 카메라 권한 허용 후 앨범 권한 요청
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
                     print("[앨범] 권한 상태: \(status.rawValue)")
                 }
             }
             
-            // 카메라 세팅
             guard let device = AVCaptureDevice.default(
                 .builtInWideAngleCamera,
                 for: .video,
@@ -53,7 +51,6 @@ final class CameraManager: NSObject, ObservableObject {
         }
     }
     
-    // 실제 사진 촬영
     func capturePhoto(completion: @escaping (UIImage?) -> Void) {
         onPhotoCaptured = completion
         let settings = AVCapturePhotoSettings()
@@ -102,23 +99,21 @@ struct StarCompassView: View {
     let viewStore: ViewStore<HomeFeature.State, HomeFeature.Action>
     
     @StateObject private var cameraManager = CameraManager()
-    @State private var pulseScale: CGFloat = 1.0
     @State private var starOpacity: Double = 0
     @State private var textOpacity: Double = 0
     @State private var isSaving: Bool = false
     @State private var showSaveSuccess: Bool = false
+    @State private var showOverwriteOptions: Bool = false
+    @State private var capturedImage: UIImage? = nil
     
     var body: some View {
-        GeometryReader { geo in
+        GeometryReader { _ in
             ZStack {
-                // ① 카메라 배경
                 CameraView(manager: cameraManager)
                     .ignoresSafeArea()
                 
-                // ② 감성 오버레이 (카메라 위에 표시)
                 overlayContent
                 
-                // ③ UI (저장 시 제외)
                 VStack {
                     headerSection
                     Spacer()
@@ -130,26 +125,44 @@ struct StarCompassView: View {
         .onAppear {
             withAnimation(.easeIn(duration: 1.2)) { starOpacity = 1 }
             withAnimation(.easeIn(duration: 1.2).delay(0.5)) { textOpacity = 1 }
-            startPulseAnimation()
+        }
+        .confirmationDialog(
+            "오늘의 별빛이 이미 기록됐어요",
+            isPresented: $showOverwriteOptions,
+            titleVisibility: .visible
+        ) {
+            Button("이미지만 저장") {
+                if let image = capturedImage {
+                    saveToAlbumOnly(image: image)
+                }
+            }
+            Button("일기 덮어쓰기") {
+                if let image = capturedImage {
+                    saveFinalImage(image, overwrite: true)
+                }
+            }
+            Button("취소", role: .cancel) {
+                capturedImage = nil
+            }
+        } message: {
+            Text("어떻게 할까요?")
         }
     }
     
-    // MARK: - 감성 오버레이 (카메라 위 + 저장에도 포함)
+    // MARK: - 감성 오버레이
     var overlayContent: some View {
         VStack(spacing: 0) {
             Spacer()
-        
-            ZStack {
-                Image(viewStore.constellation.imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 120, height: 120)
-                    .shadow(color: Color.Yunseul.starBlue.opacity(0.8), radius: 20)
-            }
-            .opacity(starOpacity)
-
+            
+            Image(viewStore.constellation.imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120, height: 120)
+                .shadow(color: Color.Yunseul.starBlue.opacity(0.8), radius: 20)
+                .opacity(starOpacity)
+            
             Spacer().frame(height: 24)
-
+            
             VStack(spacing: 6) {
                 Text(viewStore.constellation.rawValue)
                     .font(.Yunseul.constellationName)
@@ -163,9 +176,9 @@ struct StarCompassView: View {
                     .tracking(4)
             }
             .opacity(textOpacity)
-
+            
             Spacer().frame(height: 20)
-
+            
             Text(viewStore.briefingText)
                 .font(.Yunseul.briefingSmall)
                 .foregroundColor(.white.opacity(0.85))
@@ -182,7 +195,6 @@ struct StarCompassView: View {
                 .tracking(2)
                 .opacity(textOpacity)
             
-            // 하단 버튼 영역만큼 여백
             Spacer().frame(height: 180)
         }
     }
@@ -213,7 +225,7 @@ struct StarCompassView: View {
         .padding(.bottom, 16)
     }
     
-    // MARK: - 하단 버튼 (캡처에서 제외)
+    // MARK: - 하단 버튼
     private var bottomSection: some View {
         VStack(spacing: 12) {
             if showSaveSuccess {
@@ -227,50 +239,44 @@ struct StarCompassView: View {
                 .transition(.opacity)
             }
             
-            HStack(spacing: 16) {
-                Button {
-                    captureAndSave()
-                } label: {
-                    HStack(spacing: 8) {
-                        if isSaving {
-                            ProgressView().tint(.white).scaleEffect(0.8)
-                        } else {
-                            Image(systemName: "camera.fill")
-                                .font(.system(size: 14))
-                        }
-                        Text(isSaving ? "저장 중..." : "앨범 저장")
-                            .font(.Yunseul.callout)
-                            .tracking(1)
+            Button {
+                captureAndSave()
+            } label: {
+                HStack(spacing: 8) {
+                    if isSaving {
+                        ProgressView().tint(.white).scaleEffect(0.8)
+                    } else {
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: 14))
                     }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color.Yunseul.starBlue.opacity(0.4))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.Yunseul.starBlue.opacity(0.6), lineWidth: 0.5)
-                            )
-                    )
+                    Text(isSaving ? "저장 중..." : "앨범 저장")
+                        .font(.Yunseul.callout)
+                        .tracking(1)
                 }
-                .disabled(isSaving)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.Yunseul.starBlue.opacity(0.4))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color.Yunseul.starBlue.opacity(0.6), lineWidth: 0.5)
+                        )
+                )
             }
+            .disabled(isSaving)
             .padding(.horizontal, 24)
             .padding(.bottom, 48)
         }
     }
     
-    // MARK: - 카메라 사진 + 오버레이 합성
+    // MARK: - 사진 + 오버레이 합성
     private func compositeImage(cameraPhoto: UIImage) -> UIImage {
-        
-        // 화면 사이즈 그대로 사용 (scale 곱하지 않음)
         let screenSize = UIScreen.main.bounds.size
-        
         let renderer = UIGraphicsImageRenderer(size: screenSize)
         
-        return renderer.image { ctx in
-            // ① 카메라 사진을 화면 사이즈에 맞게 그리기
+        return renderer.image { _ in
             let photoAspect = cameraPhoto.size.width / cameraPhoto.size.height
             let screenAspect = screenSize.width / screenSize.height
             
@@ -296,7 +302,6 @@ struct StarCompassView: View {
             }
             cameraPhoto.draw(in: drawRect)
             
-            // ② 오버레이 렌더링
             let overlayVC = UIHostingController(
                 rootView: OverlaySnapshotView(
                     constellation: viewStore.constellation,
@@ -321,7 +326,7 @@ struct StarCompassView: View {
         }
     }
     
-    // MARK: - 캡처 후 저장
+    // MARK: - 촬영 후 저장 분기
     private func captureAndSave() {
         isSaving = true
         cameraManager.capturePhoto { cameraImage in
@@ -332,58 +337,92 @@ struct StarCompassView: View {
             
             let final = self.compositeImage(cameraPhoto: cameraImage)
             
-            PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
-                guard status == .authorized || status == .limited else {
-                    DispatchQueue.main.async { self.isSaving = false }
-                    return
+            DispatchQueue.main.async {
+                self.isSaving = false
+                self.capturedImage = final
+                
+                // ✅ 오늘 이미 저장된 일기 있으면 선택지 표시
+                if CoreDataService.shared.fetchJournalEntry(for: Date()) != nil {
+                    self.showOverwriteOptions = true
+                } else {
+                    self.saveFinalImage(final, overwrite: false)
                 }
-                PHPhotoLibrary.shared().performChanges {
-                    PHAssetChangeRequest.creationRequestForAsset(from: final)
-                } completionHandler: { success, _ in
-                    DispatchQueue.main.async {
-                        self.isSaving = false
-                        if success {
-                            self.saveJournalEntry()
-                            
-                            withAnimation { self.showSaveSuccess = true }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                withAnimation { self.showSaveSuccess = false }
-                            }
+            }
+        }
+    }
+    
+    // MARK: - 앨범만 저장
+    private func saveToAlbumOnly(image: UIImage) {
+        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+            guard status == .authorized || status == .limited else { return }
+            PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            } completionHandler: { success, _ in
+                DispatchQueue.main.async {
+                    self.capturedImage = nil
+                    if success {
+                        withAnimation { self.showSaveSuccess = true }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation { self.showSaveSuccess = false }
                         }
                     }
                 }
             }
         }
     }
-
+    
+    // MARK: - 앨범 + 일기 저장
+    private func saveFinalImage(_ image: UIImage, overwrite: Bool) {
+        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+            guard status == .authorized || status == .limited else { return }
+            PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            } completionHandler: { success, _ in
+                DispatchQueue.main.async {
+                    if success {
+                        if overwrite,
+                           let existing = CoreDataService.shared.fetchJournalEntry(for: Date()) {
+                            if let photoPath = existing.photoPath, !photoPath.isEmpty {
+                                let url = FileManager.default.urls(
+                                    for: .documentDirectory,
+                                    in: .userDomainMask
+                                )[0].appendingPathComponent(photoPath)
+                                try? FileManager.default.removeItem(at: url)
+                            }
+                            CoreDataService.shared.context.delete(existing)
+                            try? CoreDataService.shared.context.save()
+                        }
+                        
+                        self.saveJournalEntry(capturedImage: image)
+                        self.capturedImage = nil
+                        
+                        withAnimation { self.showSaveSuccess = true }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation { self.showSaveSuccess = false }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     // MARK: - Journal 저장
-    private func saveJournalEntry() {
+    private func saveJournalEntry(capturedImage: UIImage) {
         Task {
             let astronomyService = AstronomyService.shared
             
-            // 거리 계산
             let distance = astronomyService.distanceKm(
                 userLat: viewStore.userLatitude,
                 userLon: viewStore.userLongitude,
                 starLat: viewStore.subStellarLatitude,
                 starLon: viewStore.subStellarLongitude
             )
-            
-            // 방향
-            let direction = astronomyService.directionString(
-                from: viewStore.starAzimuth
-            )
-            
-            // 내 위치 지역명
+            let direction = astronomyService.directionString(from: viewStore.starAzimuth)
             let userRegion = await astronomyService.regionName(
                 latitude: viewStore.userLatitude,
                 longitude: viewStore.userLongitude
             )
-            
-            // 사진 경로 (날짜 기반)
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyyMMdd_HHmmss"
-            let photoPath = "journal_\(formatter.string(from: Date()))"
+            let photoPath = saveImageToDocuments(image: capturedImage) ?? ""
             
             CoreDataService.shared.saveJournalEntry(
                 date: Date(),
@@ -402,8 +441,25 @@ struct StarCompassView: View {
                 memo: nil
             )
             
-            print("✦ [Journal] 별빛 일기 저장 완료 - \(direction) / \(distance)km")
+            print("✦ [Journal] 저장 완료 - \(direction) / \(distance)km")
         }
+    }
+    
+    // MARK: - Documents 저장
+    private func saveImageToDocuments(image: UIImage) -> String? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd_HHmmss"
+        let fileName = "journal_\(formatter.string(from: Date())).jpg"
+        
+        guard let data = image.jpegData(compressionQuality: 0.8) else { return nil }
+        
+        let url = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        )[0].appendingPathComponent(fileName)
+        
+        try? data.write(to: url)
+        return fileName
     }
     
     // MARK: - 날짜
@@ -412,16 +468,9 @@ struct StarCompassView: View {
         formatter.dateFormat = "yyyy.MM.dd"
         return formatter.string(from: Date())
     }
-    
-    // MARK: - 펄스 애니메이션
-    private func startPulseAnimation() {
-        withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
-            pulseScale = 1.15
-        }
-    }
 }
 
-// MARK: - 오버레이 전용 뷰 (카메라 위에 합성)
+// MARK: - 오버레이 전용 뷰
 struct OverlaySnapshotView: View {
     let constellation: Constellation
     let briefingText: String
@@ -432,18 +481,14 @@ struct OverlaySnapshotView: View {
             VStack(spacing: 0) {
                 Spacer()
                 
-                // 별자리 이미지
-                ZStack {
-                    Image(constellation.imageName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 150, height: 120)
-                        .shadow(color: Color.Yunseul.starBlue.opacity(0.9), radius: 24)
-                }
+                Image(constellation.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 120)
+                    .shadow(color: Color.Yunseul.starBlue.opacity(0.9), radius: 24)
                 
                 Spacer().frame(height: 24)
                 
-                // 별자리 이름
                 Text(constellation.rawValue)
                     .font(.Yunseul.constellationName)
                     .foregroundColor(.white)
@@ -458,7 +503,6 @@ struct OverlaySnapshotView: View {
                 
                 Spacer().frame(height: 20)
                 
-                // 구분선
                 Rectangle()
                     .frame(width: 0.5, height: 30)
                     .foregroundColor(.white.opacity(0.3))

@@ -387,7 +387,7 @@ struct StarMapView: UIViewRepresentable {
     
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
-        mapView.mapType = .mutedStandard
+        mapView.mapType = .hybridFlyover
         mapView.isScrollEnabled = false
         mapView.isZoomEnabled = false
         mapView.showsUserLocation = true

@@ -135,6 +135,17 @@ struct StarJournalView: View {
             
             Spacer()
             
+            // 사진 썸네일
+            if let photoPath = entry.photoPath,
+               !photoPath.isEmpty,
+               let image = loadImageFromDocuments(fileName: photoPath) {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 44, height: 44)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+            
             Image(systemName: "chevron.right")
                 .font(.system(size: 11))
                 .foregroundColor(Color.Yunseul.textTertiary)
@@ -146,6 +157,16 @@ struct StarJournalView: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(Color.Yunseul.border.opacity(0.3), lineWidth: 0.5)
         )
+    }
+    
+    // MARK: - Documents에서 사진 불러오기
+    private func loadImageFromDocuments(fileName: String) -> UIImage? {
+        let url = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        )[0].appendingPathComponent(fileName)
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return UIImage(data: data)
     }
     
     // MARK: - 날짜 포맷
@@ -169,6 +190,7 @@ struct StarJournalDetailView: View {
     let entry: StarJournalEntry
     @Environment(\.dismiss) private var dismiss
     @State private var memo: String = ""
+    @State private var showDeleteConfirm: Bool = false
     
     var body: some View {
         ZStack {
@@ -203,6 +225,21 @@ struct StarJournalDetailView: View {
         .onAppear {
             memo = entry.memo ?? ""
         }
+        .confirmationDialog(
+            "이 일기를 삭제할까요?",
+            isPresented: $showDeleteConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("삭제", role: .destructive) {
+                deleteEntry()
+            }
+
+            Button("취소") {
+                showDeleteConfirm = false
+            }
+        } message: {
+            Text("삭제한 일기는 복구할 수 없어요")
+        }
     }
     
     // MARK: - 헤더
@@ -235,49 +272,46 @@ struct StarJournalDetailView: View {
             let constellationName = entry.constellation ?? "양자리"
             let c = Constellation(rawValue: constellationName) ?? .aries
             
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                Color.Yunseul.starBlue.opacity(0.2),
-                                Color.clear
-                            ],
-                            center: .center,
-                            startRadius: 0,
-                            endRadius: 80
-                        )
-                    )
-                    .frame(width: 180, height: 180)
-                
-                Image(c.imageName)
+            if let photoPath = entry.photoPath,
+               !photoPath.isEmpty,
+               let image = loadImageFromDocuments(fileName: photoPath) {
+                Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 130, height: 130)
-                    .opacity(0.9)
-                    .shadow(
-                        color: Color.Yunseul.starBlue.opacity(0.4),
-                        radius: 20,
-                        x: 0,
-                        y: 8
-                    )
-                    .shadow(
-                        color: Color.black.opacity(0.1),
-                        radius: 8,
-                        x: 0,
-                        y: 4
-                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding(.horizontal, 24)
+            } else {
+                ZStack {
+                    Circle()
+                        .fill(
+                            RadialGradient(
+                                colors: [Color.Yunseul.starBlue.opacity(0.2), Color.clear],
+                                center: .center,
+                                startRadius: 0,
+                                endRadius: 80
+                            )
+                        )
+                        .frame(width: 180, height: 180)
+                    
+                    Image(c.imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 130, height: 130)
+                        .opacity(0.9)
+                        .shadow(color: Color.Yunseul.starBlue.opacity(0.4), radius: 20, x: 0, y: 8)
+                        .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+                }
+                
+                Text(constellationName)
+                    .font(.Yunseul.constellationName)
+                    .foregroundColor(Color.Yunseul.textPrimary)
+                    .tracking(4)
+                
+                Text(c.latinName)
+                    .font(.Yunseul.constellationSub)
+                    .foregroundColor(Color.Yunseul.textSecondary)
+                    .tracking(3)
             }
-            
-            Text(constellationName)
-                .font(.Yunseul.constellationName)
-                .foregroundColor(Color.Yunseul.textPrimary)
-                .tracking(4)
-            
-            Text(c.latinName)
-                .font(.Yunseul.constellationSub)
-                .foregroundColor(Color.Yunseul.textSecondary)
-                .tracking(3)
         }
     }
     
@@ -374,6 +408,7 @@ struct StarJournalDetailView: View {
                     .stroke(Color.Yunseul.border.opacity(0.3), lineWidth: 0.5)
             )
             
+            // 저장 버튼
             Button {
                 saveMemo()
                 dismiss()
@@ -386,6 +421,20 @@ struct StarJournalDetailView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 16)
                             .stroke(Color.Yunseul.starBlue.opacity(0.3), lineWidth: 0.5)
+                    )
+            }
+            
+            Button {
+                showDeleteConfirm = true
+            } label: {
+                Text("일기 삭제")
+                    .font(.Yunseul.callout)
+                    .foregroundColor(.red.opacity(0.7))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.red.opacity(0.2), lineWidth: 0.5)
                     )
             }
         }
@@ -401,6 +450,37 @@ struct StarJournalDetailView: View {
         )
     }
     
+    // MARK: - 일기 삭제
+    private func deleteEntry() {
+        if let photoPath = entry.photoPath, !photoPath.isEmpty {
+            let url = FileManager.default.urls(
+                for: .documentDirectory,
+                in: .userDomainMask
+            )[0].appendingPathComponent(photoPath)
+            try? FileManager.default.removeItem(at: url)
+        }
+        
+        CoreDataService.shared.context.delete(entry)
+        try? CoreDataService.shared.context.save()
+        dismiss()
+    }
+    
+    // MARK: - Documents에서 사진 불러오기
+    private func loadImageFromDocuments(fileName: String) -> UIImage? {
+        if fileName.hasPrefix("/") {
+            guard let data = try? Data(contentsOf: URL(fileURLWithPath: fileName)) else { return nil }
+            return UIImage(data: data)
+        }
+        
+        // 파일명만 있는 경우
+        let url = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        )[0].appendingPathComponent(fileName)
+        
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return UIImage(data: data)
+    }
     
     // MARK: - 날짜 포맷
     private func dateString(from date: Date) -> String {
