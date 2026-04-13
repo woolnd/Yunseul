@@ -26,9 +26,7 @@ struct MainTabView: View {
                     }
                     .tag(AppFeature.State.Tab.home)
                 
-                TracesView(store: store.scope(
-                    state: \.traces, action: \.traces
-                ))
+                TracesView()
                     .tabItem {
                         Label("흔적", systemImage: "moon.stars.fill")
                     }

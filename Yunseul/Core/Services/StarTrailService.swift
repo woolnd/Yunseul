@@ -19,30 +19,35 @@ final class StarTrailService {
     // StarTrailService.swift 수정
     func fillMissingDates(constellation: Constellation) async {
         let calendar = Calendar.current
-        let today    = Date()
+        let today = Date()
         
         guard let birthStar = try? CoreDataService.shared.fetchBirthStar(),
-              let onboardingDate = birthStar.createdAt else {
-            print("✦ [StarTrail] 온보딩 완료일 없음")
-            return
-        }
+              let onboardingDate = birthStar.createdAt else { return }
         
-        // 마지막 저장일 확인
         let lastDate = CoreDataService.shared.fetchLastTrailDate()
         
-        // 시작일 결정
-        // 온보딩 완료일과 마지막 저장일 중 더 최근 날짜 기준
         var startDate: Date
         if let last = lastDate {
             startDate = calendar.date(byAdding: .day, value: 1, to: last) ?? today
         } else {
-            startDate = calendar.startOfDay(for: onboardingDate)  // ✅ 온보딩 완료일부터
+            startDate = calendar.startOfDay(for: onboardingDate)
         }
         
-        guard startDate <= today else { return }
+        var kstCalendar = Calendar.current
+        kstCalendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let hour = kstCalendar.component(.hour, from: today)
+        
+        let endDate: Date
+        if hour < 21 {
+            endDate = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+        } else {
+            endDate = today
+        }
+        
+        guard startDate <= endDate else { return }
         
         var current = startDate
-        while current <= today {
+        while current <= endDate {
             let subPoint = astronomyService.subStellarPoint(
                 constellation: constellation,
                 date: current
@@ -62,13 +67,11 @@ final class StarTrailService {
             )
             
             guard let next = calendar.date(
-                byAdding: .day,
-                value: 1,
-                to: current
+                byAdding: .day, value: 1, to: current
             ) else { break }
             current = next
         }
         
-        print("✦ [StarTrail] 궤적 저장 완료 - \(startDate) ~ \(today)")
+        print("✦ [StarTrail] 궤적 저장 완료 - \(startDate) ~ \(endDate)")
     }
 }

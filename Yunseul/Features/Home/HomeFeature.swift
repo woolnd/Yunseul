@@ -105,11 +105,9 @@ struct HomeFeature {
                 
                 return .merge(
                     .run { _ in
-                        // ① 위치 권한 먼저
                         await locationService.requestAuthorizationAndWait()
                         locationService.startUpdatingLocation()
                         
-                        // ② 알림 권한
                         let granted = await NotificationService.shared.requestAuthorization()
                         if granted {
                             NotificationService.shared.scheduleDailyStarNotification(
@@ -120,11 +118,20 @@ struct HomeFeature {
                     },
                     .run { _ in motionService.start() },
                     .send(.calculateStarPosition),
-                    .run { [constellation] _ in
-                        await StarTrailService.shared.fillMissingDates(
-                            constellation: constellation
-                        )
+                    .run { _ in
+                        var calendar = Calendar.current
+                        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+                        let hour = calendar.component(.hour, from: Date())
+                        if hour < 21 {
+                            CoreDataService.shared.deleteTodayTrailEntry()
+                        }
                     },
+                    
+                        .run { [constellation] _ in
+                            await StarTrailService.shared.fillMissingDates(
+                                constellation: constellation
+                            )
+                        },
                     .run { send in
                         while true {
                             try await Task.sleep(nanoseconds: 15_000_000_000)
