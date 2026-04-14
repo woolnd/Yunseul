@@ -175,4 +175,12 @@ final class CoreDataService {
             try? context.save()
         }
     }
+    
+    func deleteAllTrailEntries() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = StarTrailEntry.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        try? context.execute(deleteRequest)
+        try? context.save()
+        print("✦ [CoreData] 모든 궤적 삭제 완료")
+    }
 }

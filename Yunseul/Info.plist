@@ -20,5 +20,7 @@
         <string>SCDream6.otf</string>
         <string>MapoFlowerIsland.otf</string>
     </array>
+    <key>CFBundleDisplayName</key>
+    <string>윤슬</string>
 </dict>
 </plist>

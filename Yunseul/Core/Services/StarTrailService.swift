@@ -74,4 +74,18 @@ final class StarTrailService {
         
         print("✦ [StarTrail] 궤적 저장 완료 - \(startDate) ~ \(endDate)")
     }
+    
+    func recalculateAllTrails(constellation: Constellation) async {
+        let context = CoreDataService.shared.context
+        
+        // 기존 궤적 전체 삭제
+        await MainActor.run {
+            CoreDataService.shared.deleteAllTrailEntries()
+        }
+        
+        // 온보딩일부터 오늘까지 새 별자리로 소급 저장
+        await fillMissingDates(constellation: constellation)
+        
+        print("✦ [StarTrail] 별자리 변경으로 궤적 전체 재계산 완료 - \(constellation.rawValue)")
+    }
 }

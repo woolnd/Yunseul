@@ -74,7 +74,25 @@ struct AppFeature {
             case .tabSelected(let tab):
                 state.selectedTab = tab
                 return .none
-
+                
+            case .settings(.saveNickname):
+                state.home.nickname = state.settings.nickname
+                state.home.briefingText = "\(state.settings.nickname) 님의 별은 지금\n\(state.home.cachedRegionName)을 비추고 있어요"
+                return .none
+                
+            case .settings(.saveBirthDate):
+                let constellationName = UserDefaults.standard.string(forKey: UserDefaults.Keys.constellation) ?? "양자리"
+                let constellation = Constellation(rawValue: constellationName) ?? .aries
+                state.home.constellation = constellation
+                state.settings.constellation = constellation
+                state.home.cachedRegionName = ""
+                
+                return .run { send in
+                    await StarTrailService.shared.recalculateAllTrails(constellation: constellation)
+                    await send(.home(.calculateStarPosition))
+                    await send(.traces(.onAppear))
+                }
+                
             case .splash, .onboarding, .home, .traces, .settings:
                 return .none
             }

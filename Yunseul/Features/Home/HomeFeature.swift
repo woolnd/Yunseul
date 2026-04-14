@@ -18,7 +18,7 @@ struct HomeFeature {
         
         // MARK: - 별 정보
         var constellation: Constellation = .aries
-        var nickname: String = ""
+        var nickname: String = UserDefaults.standard.string(forKey: UserDefaults.Keys.nickname) ?? ""
         
         // MARK: - 성하점
         var subStellarLatitude: Double = 0
@@ -91,13 +91,22 @@ struct HomeFeature {
         Reduce { state, action in
             switch action {
                 
-                // MARK: - 앱 진입
             case .onAppear:
                 state.isLoading = true
                 
                 if let birthStar = try? CoreDataService.shared.fetchBirthStar() {
                     state.constellation = Constellation(rawValue: birthStar.constellation ?? "") ?? .aries
                     state.nickname = birthStar.nickname ?? ""
+                }
+                
+                if let savedNickname = UserDefaults.standard.string(forKey: UserDefaults.Keys.nickname),
+                   !savedNickname.isEmpty {
+                    state.nickname = savedNickname
+                }
+                
+                if let savedConstellation = UserDefaults.standard.string(forKey: UserDefaults.Keys.constellation),
+                   let constellation = Constellation(rawValue: savedConstellation) {
+                    state.constellation = constellation
                 }
                 
                 let constellation = state.constellation
@@ -126,12 +135,9 @@ struct HomeFeature {
                             CoreDataService.shared.deleteTodayTrailEntry()
                         }
                     },
-                    
-                        .run { [constellation] _ in
-                            await StarTrailService.shared.fillMissingDates(
-                                constellation: constellation
-                            )
-                        },
+                    .run { [constellation] _ in
+                        await StarTrailService.shared.fillMissingDates(constellation: constellation)
+                    },
                     .run { send in
                         while true {
                             try await Task.sleep(nanoseconds: 15_000_000_000)

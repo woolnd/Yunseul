@@ -55,6 +55,9 @@
 		6DEBFEBD2F8C6A6700D258B8 /* StarTrailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEBFEBC2F8C6A6700D258B8 /* StarTrailService.swift */; };
 		6DEBFEBF2F8C6CFC00D258B8 /* StarJournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEBFEBE2F8C6CFC00D258B8 /* StarJournalView.swift */; };
 		6DEBFEC12F8CC4A200D258B8 /* StarTrailGlobeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEBFEC02F8CC4A200D258B8 /* StarTrailGlobeView.swift */; };
+		6DEBFECB2F8E420E00D258B8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DEBFEC92F8E420E00D258B8 /* InfoPlist.strings */; };
+		6DEBFECE2F8E421300D258B8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DEBFECD2F8E421300D258B8 /* InfoPlist.strings */; };
+		6DEBFED12F8E421700D258B8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DEBFED02F8E421700D258B8 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +103,9 @@
 		6DEBFEBC2F8C6A6700D258B8 /* StarTrailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarTrailService.swift; sourceTree = "<group>"; };
 		6DEBFEBE2F8C6CFC00D258B8 /* StarJournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarJournalView.swift; sourceTree = "<group>"; };
 		6DEBFEC02F8CC4A200D258B8 /* StarTrailGlobeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarTrailGlobeView.swift; sourceTree = "<group>"; };
+		6DEBFECA2F8E420E00D258B8 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = InfoPlist.strings; sourceTree = "<group>"; };
+		6DEBFECC2F8E421300D258B8 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = "../ko.lproj/InfoPlist 2.strings"; sourceTree = "<group>"; };
+		6DEBFECF2F8E421700D258B8 /* InfoPlist 2.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "InfoPlist 2.strings"; path = "../en.lproj/InfoPlist 2.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -280,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				6DEBFE462F88B5A400D258B8 /* Localizable.strings */,
+				6DEBFEC92F8E420E00D258B8 /* InfoPlist.strings */,
 			);
 			path = ko.lproj;
 			sourceTree = "<group>";
@@ -287,6 +294,7 @@
 		6DEBFE442F88B57300D258B8 /* ja.lproj */ = {
 			isa = PBXGroup;
 			children = (
+				6DEBFED02F8E421700D258B8 /* InfoPlist.strings */,
 				6DEBFE4C2F88B5AF00D258B8 /* Localizable.strings */,
 			);
 			path = ja.lproj;
@@ -296,6 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				6DEBFE492F88B5AA00D258B8 /* Localizable.strings */,
+				6DEBFECD2F8E421300D258B8 /* InfoPlist.strings */,
 			);
 			path = en.lproj;
 			sourceTree = "<group>";
@@ -423,6 +432,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DEBFE1F2F88AEDC00D258B8 /* Assets.xcassets in Resources */,
+				6DEBFED12F8E421700D258B8 /* InfoPlist.strings in Resources */,
 				6DEBFE4E2F88B5AF00D258B8 /* Localizable.strings in Resources */,
 				6DEBFE4B2F88B5AA00D258B8 /* Localizable.strings in Resources */,
 				6DEBFEB72F8BECE000D258B8 /* SCDream6.otf in Resources */,
@@ -431,6 +441,8 @@
 				6DEBFEAF2F8BECA600D258B8 /* MapoFlowerIsland.otf in Resources */,
 				6DEBFE482F88B5A400D258B8 /* Localizable.strings in Resources */,
 				6DEBFEB52F8BECDC00D258B8 /* SCDream5.otf in Resources */,
+				6DEBFECE2F8E421300D258B8 /* InfoPlist.strings in Resources */,
+				6DEBFECB2F8E420E00D258B8 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,6 +512,30 @@
 				6DEBFE4D2F88B5AF00D258B8 /* ja */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		6DEBFEC92F8E420E00D258B8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DEBFECA2F8E420E00D258B8 /* ko */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6DEBFECD2F8E421300D258B8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DEBFECC2F8E421300D258B8 /* InfoPlist.strings */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6DEBFED02F8E421700D258B8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6DEBFECF2F8E421700D258B8 /* InfoPlist 2.strings */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
