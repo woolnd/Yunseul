@@ -138,6 +138,8 @@
 		6D057F562F88814100D7560D = {
 			isa = PBXGroup;
 			children = (
+				6DEBFED62F8F13F900D258B8 /* Secrets.swift */,
+				6DEBFED82F8F154000D258B8 /* .gitignore */,
 				6DEBFE1C2F88AEDC00D258B8 /* Yunseul */,
 				6D057F602F88814100D7560D /* Products */,
 			);
@@ -160,8 +162,6 @@
 				6DEBFE222F88AF0400D258B8 /* Core */,
 				6DEBFE232F88AF0E00D258B8 /* Resources */,
 				6DEBFE192F88AEDC00D258B8 /* Assets.xcassets */,
-				6DEBFED62F8F13F900D258B8 /* Secrets.swift */,
-				6DEBFED82F8F154000D258B8 /* .gitignore */,
 			);
 			path = Yunseul;
 			sourceTree = "<group>";
