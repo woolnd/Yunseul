@@ -6,4 +6,9 @@
   
 */
 
-CFBundleDisplayName = "ユンスル";
+"CFBundleDisplayName" = "ユンスル";
+"NSMotionUsageDescription" = "空にある星の方向を確認するためにモーションセンサーが必要です。";
+"NSLocationWhenInUseUsageDescription" = "星が今どこを照らしているかをお知らせするために位置情報が必要です。";
+"NSCameraUsageDescription" = "空にある星の方向を確認するためにカメラへのアクセスが必要です。";
+"NSPhotoLibraryAddUsageDescription" = "星の光の瞬間をアルバムに保存するために、ライブラリへのアクセスが必要です。";
+"NSUserNotificationUsageDescription" = "今日の星の光の便りをお届けするために通知が必要です。";

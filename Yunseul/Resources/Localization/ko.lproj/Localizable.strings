@@ -398,3 +398,24 @@
 "constellation.pisces.relation.4.type" = "대척점 별자리";
 "constellation.pisces.relation.4.name" = "처녀자리";
 "constellation.pisces.relation.4.desc" = "하늘 반대편에서 균형을 이뤄요";
+
+"tab_home" = "홈";
+"tab_traces" = "별자취";
+"tab_settings" = "설정";
+"home.briefing.format" = "%@ 님의 별은 지금\n%@을 비추고 있어요";
+
+"location.unknown" = "알 수 없는 곳";
+"direction.unknown" = "알 수 없음";
+"direction.north" = "북쪽";
+"direction.northEast" = "북동쪽";
+"direction.east" = "동쪽";
+"direction.southEast" = "남동쪽";
+"direction.south" = "남쪽";
+"direction.southWest" = "남서쪽";
+"direction.west" = "서쪽";
+"direction.northWest" = "북서쪽";
+
+"notification.daily.title" = "✦ 오늘의 별빛";
+"notification.daily.body" = "%@ 님의 %@이 밤하늘을 여행하고 있어요. 오늘의 별빛을 기록해보세요.";
+"notification.proximity.title" = "🌟 특별한 순간";
+"notification.proximity.body" = "지금 %@ 님의 %@이 당신의 하늘 가까이 지나고 있어요! 지금 바로 하늘을 올려다보세요.";

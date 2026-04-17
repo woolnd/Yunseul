@@ -6,4 +6,9 @@
   
 */
 
-CFBundleDisplayName = "윤슬";
+"CFBundleDisplayName" = "윤슬";
+"NSMotionUsageDescription" = "하늘에서 별의 방향을 찾기 위해 모션 센서가 필요해요.";
+"NSLocationWhenInUseUsageDescription" = "별이 지금 어디를 비추고 있는지 알려드리기 위해 위치 정보가 필요해요.";
+"NSCameraUsageDescription" = "하늘에서 별의 방향을 찾기 위해 카메라가 필요해요.";
+"NSPhotoLibraryAddUsageDescription" = "별빛 순간을 앨범에 저장하기 위해 필요해요.";
+"NSUserNotificationUsageDescription" = "오늘의 별빛 소식을 알려드리기 위해 알림이 필요해요.";

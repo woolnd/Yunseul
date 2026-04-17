@@ -46,8 +46,12 @@ final class NotificationService {
         )
         
         let content = UNMutableNotificationContent()
-        content.title = "✦ 오늘의 별빛"
-        content.body = "\(nickname) 님의 \(constellation.rawValue)이 밤하늘을 여행하고 있어요. 오늘의 별빛을 기록해보세요."
+        
+        let localizedStar = NSLocalizedString("constellation.\(constellation.rawValue).name", comment: "")
+        
+        content.title = NSLocalizedString("notification.daily.title", comment: "")
+        let bodyFormat = NSLocalizedString("notification.daily.body", comment: "")
+        content.body = String(format: bodyFormat, nickname, localizedStar)
         content.sound = .default
         
         // 매일 밤 9시
@@ -75,48 +79,44 @@ final class NotificationService {
         }
     }
     
-    // MARK: - 성하점이 한국 근처일 때 특별 알림
-    func scheduleKoreaProximityNotification(
+    // MARK: - 사용자의 현재 위치 근처일 때 특별 알림
+    func scheduleStarProximityNotification(
         constellation: Constellation,
         nickname: String,
+        userLatitude: Double,    // 사용자 위도 추가
+        userLongitude: Double,   // 사용자 경도 추가
         subStellarLatitude: Double,
         subStellarLongitude: Double
     ) {
-        // 한국 근방 체크 (위도 33~38, 경도 124~132)
-        let isNearKorea = (33...38).contains(subStellarLatitude)
-                       && (124...132).contains(subStellarLongitude)
+        // 사용자의 현재 위치로부터 반경 약 5도(약 500km) 이내인지 체크
+        // 이 정도 범위면 사용자 하늘(천정 근처)에 별이 있다고 볼 수 있습니다.
+        let latDiff = abs(userLatitude - subStellarLatitude)
+        let lonDiff = abs(userLongitude - subStellarLongitude)
         
-        guard isNearKorea else { return }
+        // 경도 180도 경계선 처리 (날짜변경선 근처 보정)
+        let adjustedLonDiff = lonDiff > 180 ? 360 - lonDiff : lonDiff
         
-        // 이미 오늘 보냈으면 중복 방지
-        center.removePendingNotificationRequests(
-            withIdentifiers: ["korea_proximity"]
-        )
+        let isNearMe = latDiff < 5.0 && adjustedLonDiff < 5.0
         
+        guard isNearMe else { return }
+        
+        // 중복 알림 방지 (동일 아이디로 등록 시 기존 알림 교체)
         let content = UNMutableNotificationContent()
-        content.title = "🌟 특별한 순간"
-        content.body = "지금 \(nickname) 님의 \(constellation.rawValue)이 한국 하늘 가까이 지나고 있어요! 지금 바로 하늘을 올려다보세요."
+        let localizedStar = NSLocalizedString("constellation.\(constellation.rawValue).name", comment: "")
+        
+        content.title = NSLocalizedString("notification.proximity.title", comment: "")
+        let bodyFormat = NSLocalizedString("notification.proximity.body", comment: "")
+        content.body = String(format: bodyFormat, nickname, localizedStar)
         content.sound = .default
         
-        // 즉시 발송
-        let trigger = UNTimeIntervalNotificationTrigger(
-            timeInterval: 1,
-            repeats: false
-        )
-        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(
-            identifier: "korea_proximity",
+            identifier: "star_proximity", // 아이디도 범용적으로 변경
             content: content,
             trigger: trigger
         )
         
-        center.add(request) { error in
-            if let error {
-                print("🔴 [Notification] 한국 근접 알림 실패: \(error)")
-            } else {
-                print("🔔 [Notification] 한국 근접 알림 발송!")
-            }
-        }
+        center.add(request)
     }
     
     // MARK: - 모든 알림 제거

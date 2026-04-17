@@ -6,4 +6,9 @@
   
 */
 
-CFBundleDisplayName = "Yunseul";
+"CFBundleDisplayName" = "Yunseul";
+"NSMotionUsageDescription" = "Motion sensors are used to determine the direction of stars in the sky.";
+"NSLocationWhenInUseUsageDescription" = "Location information is used to show you which stars are visible from your current position.";
+"NSCameraUsageDescription" = "Camera access is required to find the direction of stars in the sky.";
+"NSPhotoLibraryAddUsageDescription" = "Photo library access is required to save your starlight moments to your album.";
+"NSUserNotificationUsageDescription" = "Notifications are used to deliver daily starlight news to you.";

@@ -33,9 +33,8 @@ final class StarTrailService {
             startDate = calendar.startOfDay(for: onboardingDate)
         }
         
-        var kstCalendar = Calendar.current
-        kstCalendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
-        let hour = kstCalendar.component(.hour, from: today)
+        var localCalendar = Calendar.current
+        let hour = localCalendar.component(.hour, from: today)
         
         let endDate: Date
         if hour < 21 {

@@ -197,7 +197,8 @@ struct HomeFeature {
                         region = cachedRegion  // 캐시 사용
                     }
                     
-                    let briefing = "\(nickname) 님의 별은 지금\n\(region)을 비추고 있어요"
+                    let format = NSLocalizedString("home.briefing.format", comment: "브리핑 텍스트 포맷")
+                    let briefing = String(format: format, nickname, region)
                     
                     await send(.starPositionUpdated(
                         subPoint: StarSubPointEquatable(
@@ -227,10 +228,12 @@ struct HomeFeature {
                 let lat           = subPoint.latitude
                 let lon           = subPoint.longitude
                 
-                return .run { _ in
-                    NotificationService.shared.scheduleKoreaProximityNotification(
+                return .run { [state] _ in
+                    NotificationService.shared.scheduleStarProximityNotification(
                         constellation: constellation,
                         nickname: nickname,
+                        userLatitude: state.userLatitude,
+                        userLongitude: state.userLongitude, 
                         subStellarLatitude: lat,
                         subStellarLongitude: lon
                     )

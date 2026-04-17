@@ -78,11 +78,12 @@ struct AppFeature {
                 
             case .settings(.saveNickname):
                 state.home.nickname = state.settings.nickname
-                state.home.briefingText = "\(state.settings.nickname) 님의 별은 지금\n\(state.home.cachedRegionName)을 비추고 있어요"
+                let format = NSLocalizedString("home.briefing.format", comment: "")
+                state.home.briefingText = String(format: format, state.settings.nickname, state.home.cachedRegionName)
                 return .none
                 
             case .settings(.saveBirthDate):
-                let constellationName = UserDefaults.standard.string(forKey: UserDefaults.Keys.constellation) ?? "양자리"
+                let constellationName = UserDefaults.standard.string(forKey: UserDefaults.Keys.constellation) ?? "aries"
                 let constellation = Constellation(rawValue: constellationName) ?? .aries
                 state.home.constellation = constellation
                 state.settings.constellation = constellation

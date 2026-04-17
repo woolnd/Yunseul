@@ -398,3 +398,24 @@
 "constellation.pisces.relation.4.type" = "Opposite constellation";
 "constellation.pisces.relation.4.name" = "Virgo";
 "constellation.pisces.relation.4.desc" = "Balances from the opposite side of the sky";
+
+"tab_home" = "Home";
+"tab_traces" = "Star Traces";
+"tab_settings" = "Settings";
+"home.briefing.format" = "%@'s star is currently\nshining over %@";
+
+"location.unknown" = "Unknown Place";
+"direction.unknown" = "Unknown";
+"direction.north" = "North";
+"direction.northEast" = "Northeast";
+"direction.east" = "East";
+"direction.southEast" = "Southeast";
+"direction.south" = "South";
+"direction.southWest" = "Southwest";
+"direction.west" = "West";
+"direction.northWest" = "Northwest";
+
+"notification.daily.title" = "✦ Today's Starlight";
+"notification.daily.body" = "%@'s %@ is traveling the night sky. Why not record the starlight today?";
+"notification.proximity.title" = "🌟 A Special Moment";
+"notification.proximity.body" = "Your %@ is passing near your sky right now! Look up at the stars.";

@@ -41,19 +41,19 @@ struct MainTabView: View {
         HStack(spacing: 0) {
             tabBarItem(
                 icon: "star.fill",
-                label: "홈",
+                label: "tab_home",
                 tab: .home,
                 viewStore: viewStore
             )
             tabBarItem(
                 icon: "moon.stars.fill",
-                label: "별자취",
+                label: "tab_traces",
                 tab: .traces,
                 viewStore: viewStore
             )
             tabBarItem(
                 icon: "gearshape.fill",
-                label: "설정",
+                label: "tab_settings",
                 tab: .settings,
                 viewStore: viewStore
             )
@@ -110,7 +110,7 @@ struct MainTabView: View {
                 }
                 .frame(width: 44, height: 44)
                 
-                Text(label)
+                Text(LocalizedStringKey(label))
                     .font(.Yunseul.captionLight)
                     .foregroundColor(
                         isSelected

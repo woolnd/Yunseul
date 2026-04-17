@@ -398,3 +398,24 @@
 "constellation.pisces.relation.4.type" = "対蹠点の星座";
 "constellation.pisces.relation.4.name" = "乙女座";
 "constellation.pisces.relation.4.desc" = "空の反対側からバランスをとっています";
+
+"tab_home" = "ホーム";
+"tab_traces" = "星の軌跡";
+"tab_settings" = "設定";
+"home.briefing.format" = "%@さんの星は今\n%@を照らしています";
+
+"location.unknown" = "未知の場所";
+"direction.unknown" = "不明";
+"direction.north" = "北";
+"direction.northEast" = "北東";
+"direction.east" = "東";
+"direction.southEast" = "南東";
+"direction.south" = "南";
+"direction.southWest" = "南西";
+"direction.west" = "西";
+"direction.northWest" = "北西";
+
+"notification.daily.title" = "✦ 今日の星の光";
+"notification.daily.body" = "%@さんの%@가夜空を旅しています。今日の星の光を記録してみませんか？";
+"notification.proximity.title" = "🌟 特別な瞬間";
+"notification.proximity.body" = "今、%@さんの%@があなたの空の近くを通り過ぎています！今すぐ空を見上げてみてください。";

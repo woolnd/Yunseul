@@ -106,7 +106,9 @@ final class AstronomyService {
         
         do {
             let placemarks = try await geocoder.reverseGeocodeLocation(location, preferredLocale: locale)
-            guard let placemark = placemarks.first else { return "알 수 없는 곳" }
+            guard let placemark = placemarks.first else {
+                return NSLocalizedString("location.unknown", comment: "")
+            }
             
             // 나라명 → 행정구역 순서로 반환
             if let country = placemark.country {
@@ -121,28 +123,30 @@ final class AstronomyService {
                 return ocean
             }
             
-            return placemark.administrativeArea ?? "알 수 없는 곳"
+            return placemark.administrativeArea ?? NSLocalizedString("location.unknown", comment: "")
             
         } catch {
-            return "알 수 없는 곳"
+            return NSLocalizedString("location.unknown", comment: "")
         }
     }
-
+    
     // MARK: - 방위각 → 방향 변환
     func directionString(from azimuth: Double) -> String {
+        let key: String
         switch azimuth {
-        case 0..<22.5, 337.5...360: return "북쪽"
-        case 22.5..<67.5:           return "북동쪽"
-        case 67.5..<112.5:          return "동쪽"
-        case 112.5..<157.5:         return "남동쪽"
-        case 157.5..<202.5:         return "남쪽"
-        case 202.5..<247.5:         return "남서쪽"
-        case 247.5..<292.5:         return "서쪽"
-        case 292.5..<337.5:         return "북서쪽"
-        default:                    return "알 수 없음"
+        case 0..<22.5, 337.5...360: key = "direction.north"
+        case 22.5..<67.5:           key = "direction.northEast"
+        case 67.5..<112.5:          key = "direction.east"
+        case 112.5..<157.5:         key = "direction.southEast"
+        case 157.5..<202.5:         key = "direction.south"
+        case 202.5..<247.5:         key = "direction.southWest"
+        case 247.5..<292.5:         key = "direction.west"
+        case 292.5..<337.5:         key = "direction.northWest"
+        default:                    return NSLocalizedString("direction.unknown", comment: "")
         }
+        return NSLocalizedString(key, comment: "")
     }
-
+    
     // MARK: - 거리 계산 (Haversine)
     func distanceKm(
         userLat: Double, userLon: Double,
@@ -154,9 +158,9 @@ final class AstronomyService {
         let dLon = (starLon - userLon) * .pi / 180
         
         let a = sin(dLat/2) * sin(dLat/2)
-              + cos(userLat * .pi / 180)
-              * cos(starLat * .pi / 180)
-              * sin(dLon/2) * sin(dLon/2)
+        + cos(userLat * .pi / 180)
+        * cos(starLat * .pi / 180)
+        * sin(dLon/2) * sin(dLon/2)
         
         let c = 2 * atan2(sqrt(a), sqrt(1-a))
         return R * c
