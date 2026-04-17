@@ -48,13 +48,16 @@ struct HomeView: View {
             }
             .fullScreenCover(
                 isPresented: Binding(
-                    get: { viewStore.isCompassMode },
-                    set: { if !$0 { viewStore.send(.compassModeClose) } }
+                    get: { store.isCompassMode },
+                    set: { if !$0 {
+                        store.send(.compassModeClose)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            journalRefreshID = UUID()
+                        }
+                    }}
                 )
             ) {
-                StarCompassView(viewStore: viewStore) {
-                    journalRefreshID = UUID()
-                }
+                StarCompassView(viewStore: viewStore)
             }
         }
     }

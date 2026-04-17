@@ -20,6 +20,7 @@ struct StarTrailGlobeView: UIViewRepresentable {
         mapView.isScrollEnabled = true
         mapView.isZoomEnabled = true
         mapView.showsUserLocation = false
+        mapView.delegate = context.coordinator
         
         let camera = MKMapCamera()
         camera.centerCoordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
@@ -45,31 +46,43 @@ struct StarTrailGlobeView: UIViewRepresentable {
         
         guard !trailEntries.isEmpty else { return }
         
-        for entry in trailEntries {
-            let annotation = TrailAnnotation(
-                coordinate: CLLocationCoordinate2D(
-                    latitude: entry.latitude,
-                    longitude: entry.longitude
-                ),
-                date: entry.date ?? Date()
-            )
-            mapView.addAnnotation(annotation)
+        let sorted = trailEntries.sorted { ($0.date ?? Date()) < ($1.date ?? Date()) }
+        let coordinates = sorted.map {
+            CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
         }
         
-        let coordinates = trailEntries.map {
-            CLLocationCoordinate2D(
-                latitude: $0.latitude,
-                longitude: $0.longitude
-            )
-        }
-        let polyline = MKPolyline(
-            coordinates: coordinates,
-            count: coordinates.count
-        )
+        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
         mapView.addOverlay(polyline)
         
-        // 전체 궤적 보이도록 지도 조정
-        mapView.showAnnotations(mapView.annotations, animated: true)
+        if let first = coordinates.first {
+            let startAnnotation = MKPointAnnotation()
+            startAnnotation.coordinate = first
+            startAnnotation.title = "start"
+            mapView.addAnnotation(startAnnotation)
+        }
+        if let last = coordinates.last {
+            let endAnnotation = MKPointAnnotation()
+            endAnnotation.coordinate = last
+            endAnnotation.title = "end"
+            mapView.addAnnotation(endAnnotation)
+        }
+        
+        let lats = coordinates.map { $0.latitude }
+        let lons = coordinates.map { $0.longitude }
+        let minLat = lats.min() ?? 0
+        let maxLat = lats.max() ?? 0
+        let minLon = lons.min() ?? 0
+        let maxLon = lons.max() ?? 0
+        
+        let center = CLLocationCoordinate2D(
+            latitude: (minLat + maxLat) / 2,
+            longitude: (minLon + maxLon) / 2
+        )
+        let span = MKCoordinateSpan(
+            latitudeDelta: max((maxLat - minLat) * 1.5, 30),
+            longitudeDelta: max((maxLon - minLon) * 1.5, 30)
+        )
+        mapView.setRegion(MKCoordinateRegion(center: center, span: span), animated: false)
     }
     
     func makeCoordinator() -> Coordinator {
@@ -77,45 +90,34 @@ struct StarTrailGlobeView: UIViewRepresentable {
     }
     
     class Coordinator: NSObject, MKMapViewDelegate {
+        
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            guard annotation is TrailAnnotation else { return nil }
+            guard let point = annotation as? MKPointAnnotation else { return nil }
             
-            let view = MKMarkerAnnotationView(
-                annotation: annotation,
-                reuseIdentifier: "trail"
-            )
-            view.markerTintColor = UIColor(Color.Yunseul.starBlue)
-            view.glyphImage = UIImage(systemName: "star.fill")
-            view.displayPriority = .defaultLow
+            let isEnd = point.title == "end"
+            
+            let view = MKAnnotationView(annotation: annotation, reuseIdentifier: point.title)
+            view.canShowCallout = false
+            
+            let size: CGFloat = isEnd ? 10 : 6
+            let circle = UIView(frame: CGRect(x: 0, y: 0, width: size, height: size))
+            circle.backgroundColor = UIColor(Color.Yunseul.starBlue).withAlphaComponent(isEnd ? 1.0 : 0.5)
+            circle.layer.cornerRadius = size / 2
+            view.addSubview(circle)
+            view.frame = circle.frame
+            
             return view
         }
         
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
             if let polyline = overlay as? MKPolyline {
                 let renderer = MKPolylineRenderer(polyline: polyline)
-                renderer.strokeColor = UIColor(Color.Yunseul.starBlue).withAlphaComponent(0.6)
+                renderer.strokeColor = UIColor(Color.Yunseul.starBlue).withAlphaComponent(0.7)
                 renderer.lineWidth = 2
-                renderer.lineDashPattern = [4, 4]
+                renderer.lineDashPattern = [6, 4]
                 return renderer
             }
             return MKOverlayRenderer()
         }
-    }
-}
-
-// MARK: - 커스텀 어노테이션
-class TrailAnnotation: NSObject, MKAnnotation {
-    let coordinate: CLLocationCoordinate2D
-    let date: Date
-    
-    var title: String? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy.MM.dd"
-        return "✦ \(formatter.string(from: date))"
-    }
-    
-    init(coordinate: CLLocationCoordinate2D, date: Date) {
-        self.coordinate = coordinate
-        self.date = date
     }
 }
