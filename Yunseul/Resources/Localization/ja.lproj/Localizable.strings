@@ -67,3 +67,20 @@
 "journal.delete.confirm" = "削除";
 "journal.delete.cancel" = "キャンセル";
 "journal.delete.message" = "削除した日記は復元できません";
+
+// MARK: - Traces
+"traces.title" = "星の軌跡";
+"traces.subtitle" = "星が歩んできた道";
+"traces.tab.trail" = "星の軌跡";
+"traces.tab.journal" = "星の光日記";
+"traces.trail.record.time" = "毎晩9時を基準に記録されます";
+"traces.trail.record.today" = "今日の記録は夜9時に追加されます";
+"traces.trail.count" = "✦ %d日の軌跡";
+"traces.journal.has.record" = "✦ 日記を記録した日です";
+"traces.journal.no.today" = "今日の星の光をまだ撮っていません";
+"traces.journal.camera.button" = "星と一緒に空を撮る";
+"traces.journal.view.all" = "すべて見る";
+"traces.summary.star.place" = "星が照らしていた場所";
+"traces.summary.my.place" = "私がいた場所";
+"traces.summary.direction" = "星の方向";
+"traces.summary.distance" = "星までの距離";

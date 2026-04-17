@@ -67,3 +67,20 @@
 "journal.delete.confirm" = "삭제";
 "journal.delete.cancel" = "취소";
 "journal.delete.message" = "삭제한 일기는 복구할 수 없어요";
+
+// MARK: - Traces
+"traces.title" = "별자취";
+"traces.subtitle" = "별이 지나온 길";
+"traces.tab.trail" = "별의 궤적";
+"traces.tab.journal" = "별빛 일기";
+"traces.trail.record.time" = "매일 밤 9시 기준으로 기록돼요";
+"traces.trail.record.today" = "오늘 기록은 밤 9시에 추가돼요";
+"traces.trail.count" = "✦ %d일의 궤적";
+"traces.journal.has.record" = "✦ 일기를 기록한 날이에요";
+"traces.journal.no.today" = "오늘의 별빛을 아직 담지 않았어요";
+"traces.journal.camera.button" = "별과 함께 하늘 찍기";
+"traces.journal.view.all" = "전체 보기";
+"traces.summary.star.place" = "별이 비추던 곳";
+"traces.summary.my.place" = "내가 있던 곳";
+"traces.summary.direction" = "별의 방향";
+"traces.summary.distance" = "별까지의 거리";

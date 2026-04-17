@@ -65,12 +65,12 @@ struct TracesView: View {
     // MARK: - 헤더
     private var headerSection: some View {
         VStack(spacing: 4) {
-            Text("별자취")
+            Text(String(localized: "traces.title"))
                 .font(.Yunseul.appTitle)
                 .foregroundColor(Color.Yunseul.textPrimary)
                 .tracking(6)
             
-            Text("별이 지나온 길")
+            Text(String(localized: "traces.subtitle"))
                 .font(.Yunseul.captionLight)
                 .foregroundColor(Color.Yunseul.textTertiary)
                 .tracking(2)
@@ -82,8 +82,8 @@ struct TracesView: View {
     // MARK: - 탭 선택
     private var tabSelector: some View {
         HStack(spacing: 0) {
-            tabButton(title: "별의 궤적", index: 0)
-            tabButton(title: "별빛 일기", index: 1)
+            tabButton(title: String(localized: "traces.tab.trail"), index: 0)
+            tabButton(title: String(localized: "traces.tab.journal"), index: 1)
         }
         .background(Color.Yunseul.elevated)
         .cornerRadius(12)
@@ -126,7 +126,7 @@ struct TracesView: View {
                         Image(systemName: "clock.fill")
                             .font(.system(size: 11))
                             .foregroundColor(Color.Yunseul.starBlue)
-                        Text("매일 밤 9시 기준으로 기록돼요")
+                        Text(String(localized: "traces.trail.record.time"))
                             .font(.Yunseul.captionLight)
                             .foregroundColor(Color.Yunseul.textSecondary)
                     }
@@ -135,7 +135,7 @@ struct TracesView: View {
                             Image(systemName: "info.circle")
                                 .font(.system(size: 11))
                                 .foregroundColor(Color.Yunseul.textTertiary)
-                            Text("오늘 기록은 밤 9시에 추가돼요")
+                            Text(String(localized: "traces.trail.record.today"))
                                 .font(.Yunseul.captionLight)
                                 .foregroundColor(Color.Yunseul.textTertiary)
                         }
@@ -145,7 +145,7 @@ struct TracesView: View {
                 .padding(.horizontal, 20)
                 
                 HStack {
-                    Text("✦ \(store.trailEntries.count)일의 궤적")
+                    Text(String(format: String(localized: "traces.trail.count"), store.trailEntries.count))
                         .font(.Yunseul.caption)
                         .foregroundColor(Color.Yunseul.textTertiary)
                         .tracking(2)
@@ -191,7 +191,7 @@ struct TracesView: View {
                 .font(.system(size: 28))
                 .foregroundColor(Color.Yunseul.textTertiary.opacity(0.5))
             
-            Text("오늘의 별빛을 아직 담지 않았어요")
+            Text(String(localized: "traces.journal.no.today"))
                 .font(.Yunseul.briefingSmall)
                 .foregroundColor(Color.Yunseul.textTertiary)
                 .multilineTextAlignment(.center)
@@ -203,7 +203,7 @@ struct TracesView: View {
                 HStack {
                     Image(systemName: "camera.fill")
                         .font(.system(size: 14))
-                    Text("별과 함께 하늘 찍기")
+                    Text(String(localized: "traces.journal.camera.button"))
                         .font(.Yunseul.callout)
                         .tracking(2)
                 }
@@ -346,7 +346,7 @@ struct TracesView: View {
                 Text("✦")
                     .font(.system(size: 9))
                     .foregroundColor(Color.Yunseul.starBlue)
-                Text("일기를 기록한 날이에요")
+                Text(String(localized: "traces.journal.has.record"))
                     .font(.Yunseul.captionLight)
                     .foregroundColor(Color.Yunseul.textTertiary)
                 Spacer()
@@ -374,18 +374,18 @@ struct TracesView: View {
             }
             
             VStack(spacing: 8) {
-                summaryRow(icon: "sparkles", title: "별이 비추던 곳", value: entry.starRegionName ?? "")
-                summaryRow(icon: "location.fill", title: "내가 있던 곳", value: entry.userRegionName ?? "")
-                summaryRow(
-                    icon: "location.north.fill",
-                    title: "별의 방향",
-                    value: "\(entry.starDirection ?? "") / 고도 \(String(format: "%.1f", entry.starAltitude))°"
-                )
-                summaryRow(
-                    icon: "arrow.left.and.right",
-                    title: "별까지의 거리",
-                    value: String(format: "%.0f km", entry.distanceKm)
-                )
+                summaryRow(icon: "sparkles",
+                    title: String(localized: "traces.summary.star.place"),
+                    value: entry.starRegionName ?? "")
+                summaryRow(icon: "location.fill",
+                    title: String(localized: "traces.summary.my.place"),
+                    value: entry.userRegionName ?? "")
+                summaryRow(icon: "location.north.fill",
+                    title: String(localized: "traces.summary.direction"),
+                    value: "\(entry.starDirection ?? "") / 고도 \(String(format: "%.1f", entry.starAltitude))°")
+                summaryRow(icon: "arrow.left.and.right",
+                    title: String(localized: "traces.summary.distance"),
+                    value: String(format: "%.0f km", entry.distanceKm))
             }
             
             if let memo = entry.memo, !memo.isEmpty {
@@ -400,7 +400,7 @@ struct TracesView: View {
                 store.send(.journalEntryTapped(entry))
             } label: {
                 HStack {
-                    Text("전체 보기")
+                    Text(String(localized: "traces.journal.view.all"))
                         .font(.Yunseul.callout)
                         .foregroundColor(Color.Yunseul.starBlue)
                     Image(systemName: "chevron.right")
@@ -593,7 +593,7 @@ struct TracesView: View {
     private func monthYearString(from date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy년 MM월"
-        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.locale = Locale.current
         return formatter.string(from: date)
     }
     
@@ -612,7 +612,7 @@ struct TracesView: View {
     private func weekdayString(from date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "E"
-        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.locale = Locale.current
         return formatter.string(from: date)
     }
 }

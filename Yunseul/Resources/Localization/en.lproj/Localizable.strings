@@ -67,3 +67,21 @@
 "journal.delete.confirm" = "Delete";
 "journal.delete.cancel" = "Cancel";
 "journal.delete.message" = "Deleted diaries cannot be recovered";
+
+// MARK: - Traces
+"traces.title" = "Star Traces";
+"traces.subtitle" = "The path your star has traveled";
+"traces.tab.trail" = "Star Trail";
+"traces.tab.journal" = "Starlight Diary";
+"traces.trail.record.time" = "Recorded at 9PM every night";
+"traces.trail.record.today" = "Today's record will be added at 9PM";
+"traces.trail.count" = "✦ %d day trail";
+"traces.journal.has.record" = "✦ Days with diary entries";
+"traces.journal.no.today" = "You haven't captured today's starlight yet";
+"traces.journal.camera.button" = "Shoot the sky with your star";
+"traces.journal.view.all" = "View all";
+"traces.summary.star.place" = "Where the star was shining";
+"traces.summary.my.place" = "Where I was";
+"traces.summary.direction" = "Star direction";
+"traces.summary.distance" = "Distance to star";
+
