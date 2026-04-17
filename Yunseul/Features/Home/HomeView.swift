@@ -112,7 +112,7 @@ struct HomeView: View {
                 
                 StarRelationView(constellation: viewStore.constellation)
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 48)
+                    .padding(.bottom, 150)
             }
         }
     }

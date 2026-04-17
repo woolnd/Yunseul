@@ -45,7 +45,7 @@ enum Constellation: String, Equatable, CaseIterable {
     
     // 감성 설명
     var description: String {
-        String(localized: "constellation.\(rawValue).description")
+        NSLocalizedString("constellation.\(rawValue).description", comment: "")
     }
     
     // 라틴어 이름
@@ -84,7 +84,7 @@ enum Constellation: String, Equatable, CaseIterable {
     }
     
     var localizedName: String {
-        String(localized: "constellation.\(rawValue).name")
+        NSLocalizedString("constellation.\(rawValue).name", comment: "")
     }
 }
 
@@ -106,8 +106,8 @@ extension Constellation {
     var storyPages: [StoryPage] {
         (1...4).map { i in
             StoryPage(
-                title: String(localized: "constellation.\(rawValue).story.\(i).title"),
-                content: String(localized: "constellation.\(rawValue).story.\(i).content")
+                title: NSLocalizedString("constellation.\(rawValue).story.\(i).title", comment: ""),
+                content: NSLocalizedString("constellation.\(rawValue).story.\(i).content", comment: "")
             )
         }
     }
@@ -117,9 +117,9 @@ extension Constellation {
     var relations: [StarRelation] {
         (1...4).map { i in
             StarRelation(
-                type: String(localized: "constellation.\(rawValue).relation.\(i).type"),
-                constellation: String(localized: "constellation.\(rawValue).relation.\(i).name"),
-                description: String(localized: "constellation.\(rawValue).relation.\(i).desc"),
+                type: NSLocalizedString("constellation.\(rawValue).relation.\(i).type", comment: ""),
+                constellation: NSLocalizedString("constellation.\(rawValue).relation.\(i).name", comment: ""),
+                description: NSLocalizedString("constellation.\(rawValue).relation.\(i).desc", comment: ""),
                 icon: relationIcon(i)
             )
         }

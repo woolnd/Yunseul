@@ -155,7 +155,7 @@ struct TracesView: View {
                 
                 trailTimeline(entries: store.trailEntries)
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 100)
+                    .padding(.bottom, 150)
             }
         }
     }
